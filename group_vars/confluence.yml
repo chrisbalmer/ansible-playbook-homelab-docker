@@ -17,6 +17,6 @@ compose_vmware_tag_ansible_groups_confluence:
     user: 1012
     group: 1014
     postgres_version: 11.2
-    db_user: "{{ lookup('onepassword', 'Confluence Server', section='db', field='username', vault='homelab') }}"
-    db_pass: "{{ lookup('onepassword', 'Confluence Server', section='db', field='password', vault='homelab') }}"
+    db_user: "{{ lookup('onepassword', 'Confluence Server', section='db', field='username', vault='homelab', domain=op_domain, secret_key=op_key, master_password=op_password) }}"
+    db_pass: "{{ lookup('onepassword', 'Confluence Server', section='db', field='password', vault='homelab', domain=op_domain, secret_key=op_key, master_password=op_password) }}"
     db_name: confluence
