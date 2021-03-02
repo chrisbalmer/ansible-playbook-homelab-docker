@@ -1,8 +1,4 @@
 ---
-collections:
-  - ansible.posix
-  - community.general
-
 roles:
   - name: chrisbalmer.docker-compose
     scm: git
