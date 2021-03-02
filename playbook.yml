@@ -2,6 +2,8 @@
   hosts: docker_hosts
   gather_facts: yes
   become: yes
+  environment:
+    OP_DEVICE: ansible
   pre_tasks:
     - debug:
         var: op_email
