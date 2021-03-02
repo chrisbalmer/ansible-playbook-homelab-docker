@@ -17,6 +17,6 @@ compose_vmware_tag_ansible_groups_jira:
     user: 1012
     group: 1014
     postgres_version: "11.10"
-    db_user: "{{ lookup('onepassword', 'Jira Server', section='db', field='username', vault='homelab', domain=op_domain, secret_key=op_key, master_password=op_password) }}"
-    db_pass: "{{ lookup('onepassword', 'Jira Server', section='db', field='password', vault='homelab', domain=op_domain, secret_key=op_key, master_password=op_password) }}"
+    db_user: "{{ lookup('onepassword', 'Jira Server', section='db', field='username', vault='homelab', username=op_email, domain=op_domain, secret_key=op_key, master_password=op_password) }}"
+    db_pass: "{{ lookup('onepassword', 'Jira Server', section='db', field='password', vault='homelab', username=op_email, domain=op_domain, secret_key=op_key, master_password=op_password) }}"
     db_name: jira
