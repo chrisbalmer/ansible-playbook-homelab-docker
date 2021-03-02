@@ -22,6 +22,6 @@ compose_vmware_tag_ansible_groups_gitea:
     http_port: 3000
     domain: git.balmerfamilyfarm.com
     postgres_version: "11.10"
-    db_user: "{{ lookup('onepassword', 'ops-gitea-1', section='db', field='username', vault='homelab', username=op_email, domain=op_domain, secret_key=op_key, master_password=op_password) }}"
-    db_pass: "{{ lookup('onepassword', 'ops-gitea-1', section='db', field='password', vault='homelab', username=op_email, domain=op_domain, secret_key=op_key, master_password=op_password) }}"
+    db_user: "{{ lookup('onepassword', 'ops-gitea-1', section='db', field='username', vault='homelab', username=op_email, subdomain=op_domain, secret_key=op_key, master_password=op_password) }}"
+    db_pass: "{{ lookup('onepassword', 'ops-gitea-1', section='db', field='password', vault='homelab', username=op_email, subdomain=op_domain, secret_key=op_key, master_password=op_password) }}"
     db_name: gitea

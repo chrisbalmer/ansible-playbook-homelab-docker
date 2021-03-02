@@ -15,6 +15,6 @@ compose_vmware_tag_ansible_groups_wikijs:
     group: 1014
     http_port: 3000
     domain: wiki.balmerfamilyfarm.com
-    db_user: "{{ lookup('onepassword', 'WikiJS Accounts', section='db', field='username', vault='homelab', username=op_email, domain=op_domain, secret_key=op_key, master_password=op_password) }}"
-    db_pass: "{{ lookup('onepassword', 'WikiJS Accounts', section='db', field='password', vault='homelab', username=op_email, domain=op_domain, secret_key=op_key, master_password=op_password) }}"
+    db_user: "{{ lookup('onepassword', 'WikiJS Accounts', section='db', field='username', vault='homelab', username=op_email, subdomain=op_domain, secret_key=op_key, master_password=op_password) }}"
+    db_pass: "{{ lookup('onepassword', 'WikiJS Accounts', section='db', field='password', vault='homelab', username=op_email, subdomain=op_domain, secret_key=op_key, master_password=op_password) }}"
     db_name: wikijs
