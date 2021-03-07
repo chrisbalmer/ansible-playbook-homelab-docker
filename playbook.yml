@@ -2,11 +2,7 @@
   hosts: docker_hosts
   gather_facts: yes
   become: yes
-  environment:
-    OP_DEVICE: ansible
   pre_tasks:
-    - debug:
-        var: op_email
     - name: Combine composes
       set_fact:
         composes: "{{ composes|default({}) | combine(hostvars[inventory_hostname]['compose_' + item]|default({})) }}"
