@@ -1,0 +1,98 @@
+version: '3.3'
+networks:
+    traefik:
+        external:
+            name: "{{ traefik_network }}"
+    netbox:
+        external: false
+
+services:
+    db:
+        image: "{{ composes.netbox.images.db }}"
+        user: "{{ composes.netbox.user }}:{{ composes.netbox.group }}"
+        restart: always
+        environment:
+            - "POSTGRES_USER={{ composes.netbox.db_user }}"
+            - "POSTGRES_PASSWORD={{ composes.netbox.db_pass }}"
+            - "POSTGRES_DB={{ composes.netbox.db_name }}"
+        networks:
+            - netbox
+        volumes:
+            - "{{ composes.netbox.mounts.db.local }}:/var/lib/postgresql/data"
+{% if splunk.hec_endpoint is defined %}
+        logging:
+            driver: splunk
+            options:
+                splunk-url: "{{ splunk.hec_endpoint }}"
+                splunk-token: "{{ splunk.hec_token }}"
+                splunk-insecureskipverify: "{{ splunk.hec_skip_verify }}"
+                splunk-format: "{{ splunk.hec_format }}"
+{% endif %}
+
+
+    kv:
+        image: {{ composes.netbox.images.kv }}
+        environment:
+            - "REDIS_PASSWORD={{ composes.netbox.kv_pass }}"
+        command:
+            - sh
+            - -c
+            - redis-server --appendonly yes --requirepass $$REDIS_PASSWORD
+        restart: unless-stopped
+        networks:
+            - netbox
+        volumes:
+            - "{{ composes.netbox.mounts.kv.local }}:/data"
+{% if splunk.hec_endpoint is defined %}
+        logging:
+            driver: splunk
+            options:
+                splunk-url: "{{ splunk.hec_endpoint }}"
+                splunk-token: "{{ splunk.hec_token }}"
+                splunk-insecureskipverify: "{{ splunk.hec_skip_verify }}"
+                splunk-format: "{{ splunk.hec_format }}"
+{% endif %}
+
+
+    app:
+        image: "{{ composes.netbox.images.app }}"
+        environment:
+            - "PUID={{ composes.netbox.user }}"
+            - "PGID={{ composes.netbox.group }}"
+            - "SUPERUSER_EMAIL={{ composes.netbox.su_email }}"
+            - "SUPERUSER_PASSWORD={{ composes.netbox.su_pass }}"
+            - "ALLOWED_HOST={{ composes.netbox.domain }}"
+            - "DB_NAME={{ composes.netbox.db_name }}"
+            - "DB_USER={{ composes.netbox.db_user }}"
+            - "DB_PASSWORD={{ composes.netbox.db_pass }}"
+            - "DB_HOST=db"
+            - "DB_PORT=5432"
+            - "REDIS_HOST=kv"
+            - "REDIS_PORT=6379"
+            - "REDIS_PASSWORD={{ composes.netbox.kv_pass }}"
+            - "TZ={{ composes.netbox.timezone }}"
+        restart: always
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.netbox.rule=Host(`{{ composes.netbox.domain }}`)"
+            - "traefik.http.routers.netbox.tls=true"
+            - "traefik.http.routers.netbox.tls.certresolver=letsencrypt"
+            - "traefik.http.services.netbox.loadbalancer.server.port={{ composes.netbox.http_port }}"
+            - "traefik.docker.network={{ traefik_network }}"
+        networks:
+            - netbox
+            - traefik
+        volumes:
+            - "{{ composes.netbox.mounts.app.local }}:/config"
+{% if splunk.hec_endpoint is defined %}
+        logging:
+            driver: splunk
+            options:
+                splunk-url: "{{ splunk.hec_endpoint }}"
+                splunk-token: "{{ splunk.hec_token }}"
+                splunk-insecureskipverify: "{{ splunk.hec_skip_verify }}"
+                splunk-format: "{{ splunk.hec_format }}"
+{% endif %}
+        depends_on:
+            - db
+            - kv

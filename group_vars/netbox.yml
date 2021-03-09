@@ -1,0 +1,28 @@
+---
+compose_netbox:
+  netbox:
+    mounts:
+      app:
+        local: /mnt/netbox/app
+        remote: "{{ nfs_server }}:/mnt/POOL_A/docker/netbox/app"
+      db:
+        local: /mnt/netbox/db
+        remote: "{{ nfs_server }}:/mnt/POOL_A/docker/netbox/db"
+      kv:
+        local: /mnt/netbox/kv
+        remote: "{{ nfs_server }}:/mnt/POOL_A/docker/netbox/kv"  
+    images:
+      app: "{{ docker_registry }}/linuxserver/netbox:version-v2.10.5"
+      db: "{{ docker_registry }}/postgres:11.10"
+      kv: "{{ docker_registry }}/redis:6.0.10"
+    user: 1012
+    group: 1014
+    http_port: 8000
+    domain: netbox.balmerfamilyfarm.com
+    db_user: "{{ lookup('onepassword', 'netbox', section='db', field='username', vault='homelab', username=op_email, subdomain=op_domain, secret_key=op_key, master_password=op_password) }}"
+    db_pass: "{{ lookup('onepassword', 'netbox', section='db', field='password', vault='homelab', username=op_email, subdomain=op_domain, secret_key=op_key, master_password=op_password) }}"
+    db_name: netbox
+    kv_pass: "{{ lookup('onepassword', 'netbox', section='kv', field='password', vault='homelab', username=op_email, subdomain=op_domain, secret_key=op_key, master_password=op_password) }}"
+    timezone: America/Detroit
+    su_email: "{{ lookup('onepassword', 'netbox', field='username', vault='homelab', username=op_email, subdomain=op_domain, secret_key=op_key, master_password=op_password) }}"
+    su_pass: "{{ lookup('onepassword', 'netbox', field='password', vault='homelab', username=op_email, subdomain=op_domain, secret_key=op_key, master_password=op_password) }}"
