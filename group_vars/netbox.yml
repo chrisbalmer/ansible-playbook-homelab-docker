@@ -17,7 +17,7 @@ compose_netbox:
       kv: "{{ docker_registry }}/redis:6.0.10"
     user: 1012
     group: 1014
-    http_port: 8080
+    http_port: 8000
     domain: netbox.balmerfamilyfarm.com
     db_user: "{{ lookup('onepassword', 'netbox', section='db', field='username', vault='homelab', username=op_email, subdomain=op_domain, secret_key=op_key, master_password=op_password) }}"
     db_pass: "{{ lookup('onepassword', 'netbox', section='db', field='password', vault='homelab', username=op_email, subdomain=op_domain, secret_key=op_key, master_password=op_password) }}"
