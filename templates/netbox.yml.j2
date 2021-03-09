@@ -65,10 +65,10 @@ services:
             - "DB_NAME={{ composes.netbox.db_name }}"
             - "DB_USER={{ composes.netbox.db_user }}"
             - "DB_PASSWORD={{ composes.netbox.db_pass }}"
-            - "DB_HOST=db
-            - "DB_PORT=5432
-            - "REDIS_HOST=kv
-            - "REDIS_PORT=6379
+            - "DB_HOST=db"
+            - "DB_PORT=5432"
+            - "REDIS_HOST=kv"
+            - "REDIS_PORT=6379"
             - "REDIS_PASSWORD={{ composes.netbox.kv_pass }}"
             - "TZ={{ composes.netbox.timezone }}"
         restart: always
