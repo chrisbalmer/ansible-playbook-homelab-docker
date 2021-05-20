@@ -37,6 +37,9 @@ services:
             - "DB_NAME={{ composes.gitea.db_name }}"
             - "DB_USER={{ composes.gitea.db_user }}"
             - "DB_PASSWD={{ composes.gitea.db_pass }}"
+{% for config in composes.gitea.configs %}
+            - "{{ config }}"
+{% endfor %}
         restart: always
         labels:
             - "traefik.enable=true"
