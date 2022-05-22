@@ -12,9 +12,9 @@ compose_netbox:
         local: /mnt/netbox/kv
         remote: "{{ nfs_server }}:/mnt/POOL_A/docker/netbox/kv"  
     images:
-      app: "{{ docker_registry }}/linuxserver/netbox:version-v2.10.5"
-      db: "{{ docker_registry }}/postgres:11.10"
-      kv: "{{ docker_registry }}/redis:6.0.10"
+      app: "{{ docker_registry }}/linuxserver/netbox:version-v3.2.3"
+      db: "{{ docker_registry }}/postgres:14.3"
+      kv: "{{ docker_registry }}/redis:6.2.7"
     user: 1012
     group: 1014
     http_port: 8000
