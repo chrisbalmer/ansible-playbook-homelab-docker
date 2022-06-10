@@ -25,3 +25,10 @@ compose_vmware_tag_ansible_groups_gitea:
     db_user: "{{ lookup('onepassword', 'ops-gitea-1', section='db', field='username', vault='homelab', username=op_email, subdomain=op_domain, secret_key=op_key, master_password=op_password) }}"
     db_pass: "{{ lookup('onepassword', 'ops-gitea-1', section='db', field='password', vault='homelab', username=op_email, subdomain=op_domain, secret_key=op_key, master_password=op_password) }}"
     db_name: gitea
+    configs:
+      - GITEA__server__SSH_DOMAIN=git.balmerfamilyfarm.com
+    splunk:
+      hec_endpoint: https://hec.balmerfamilyfarm.com
+      hec_token: "{{ lookup('onepassword', 'Cribl HEC Token: Gitea', field='password', vault='homelab', username=op_email, subdomain=op_domain, secret_key=op_key, master_password=op_password) }}"
+      hec_skip_verify: false
+      hec_format: json

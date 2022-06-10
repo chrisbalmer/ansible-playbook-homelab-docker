@@ -18,14 +18,14 @@ services:
             - gitea
         volumes:
             - "{{ composes.gitea.mounts.db.local }}:/var/lib/postgresql/data"
-{% if splunk.hec_endpoint is defined %}
+{% if composes.gitea.splunk.hec_endpoint is defined %}
         logging:
             driver: splunk
             options:
-                splunk-url: "{{ splunk.hec_endpoint }}"
-                splunk-token: "{{ splunk.hec_token }}"
-                splunk-insecureskipverify: "{{ splunk.hec_skip_verify }}"
-                splunk-format: "{{ splunk.hec_format }}"
+                splunk-url: "{{ composes.gitea.splunk.hec_endpoint }}"
+                splunk-token: "{{ composes.gitea.splunk.hec_token }}"
+                splunk-insecureskipverify: "{{ composes.gitea.splunk.hec_skip_verify }}"
+                splunk-format: "{{ composes.gitea.splunk.hec_format }}"
 {% endif %}
     app:
         image: "{{ composes.gitea.images.app }}"
@@ -37,6 +37,9 @@ services:
             - "DB_NAME={{ composes.gitea.db_name }}"
             - "DB_USER={{ composes.gitea.db_user }}"
             - "DB_PASSWD={{ composes.gitea.db_pass }}"
+{% for config in composes.gitea.configs %}
+            - "{{ config }}"
+{% endfor %}
         restart: always
         labels:
             - "traefik.enable=true"
@@ -50,14 +53,14 @@ services:
             - traefik
         volumes:
             - "{{ composes.gitea.mounts.app.local }}:/data"
-{% if splunk.hec_endpoint is defined %}
+{% if composes.gitea.splunk.hec_endpoint is defined %}
         logging:
             driver: splunk
             options:
-                splunk-url: "{{ splunk.hec_endpoint }}"
-                splunk-token: "{{ splunk.hec_token }}"
-                splunk-insecureskipverify: "{{ splunk.hec_skip_verify }}"
-                splunk-format: "{{ splunk.hec_format }}"
+                splunk-url: "{{ composes.gitea.splunk.hec_endpoint }}"
+                splunk-token: "{{ composes.gitea.splunk.hec_token }}"
+                splunk-insecureskipverify: "{{ composes.gitea.splunk.hec_skip_verify }}"
+                splunk-format: "{{ composes.gitea.splunk.hec_format }}"
 {% endif %}
         ports:
             - "{{ composes.gitea.ports.ssh.host }}:22"

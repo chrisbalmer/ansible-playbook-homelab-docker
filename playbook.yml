@@ -1,7 +1,7 @@
 - name: Setup Docker Composes
   hosts: docker_hosts
-  gather_facts: yes
-  become: yes
+  gather_facts: true
+  become: true
   pre_tasks:
     - name: Combine composes
       set_fact:
